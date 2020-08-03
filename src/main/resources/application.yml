@@ -1,0 +1,24 @@
+server:
+  port: 8080
+  servlet:    context-path: /
+    encoding:      charset: UTF-8
+      enabled: true
+      force: true 
+      
+      
+spring:  datasource:    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/security?serverTimezone=Asia/Seoul
+    username: cos
+    password: cos1234
+    
+# 아래는 없어도 된다고 함    #  mvc:#    view:#      prefix: /templates/
+#      suffix: .mustache
+  jpa:    hibernate:      ddl-auto: update #create update none. model에 클래스에 맞춰 테이블 자동 생성. 처음에는 create 해놔야
+      naming:        physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl # sql에 camel 표기법을 따르도록!
+    show-sql: true # sts 콘솔 화면에 sql 명령어를 보여줌
+    
+  security:    oauth2:      client:        registration:            google: # 여기 등록만 해 놓으면 로그인 클릭시 구글 로그인 화면 열림 http://localhost:8080/login/oauth2/code/google
+              client-id: 1043134665622-ejnj4euogocetdkph02au34fh6e66fpc.apps.googleusercontent.com
+              client-secret: _FT6JRV6ErsjdzyufDH3mgyK
+              scope:              - email
+              - profile
