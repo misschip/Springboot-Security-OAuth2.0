@@ -34,7 +34,8 @@ public class IndexController {
 	
 	@GetMapping("/user")
 	public @ResponseBody String user(@AuthenticationPrincipal PrincipalDetails principal) {
-		System.out.println(principal);
+		System.out.println("principal: " + principal);
+		System.out.println("OAuth2: " + principal.getUser().getProviderId());
 		// System.out.println(principal.getUser().getRole());	// null
 		// System.out.println(principal.getAuthorities());	// ROLE_USER 등이 출력되도록! 숙제
 		return "user 페이지입니다";

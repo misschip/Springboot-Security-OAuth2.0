@@ -22,3 +22,10 @@ spring:  datasource:    driver-class-name: com.mysql.cj.jdbc.Driver
               client-secret: _FT6JRV6ErsjdzyufDH3mgyK
               scope:              - email
               - profile
+
+            facebook:
+              client-id: 571921153476215
+              client-secret: 11b2b7738fbc0c2b4eae6221940fadbd
+              scope:
+              - email
+              - public_profile
