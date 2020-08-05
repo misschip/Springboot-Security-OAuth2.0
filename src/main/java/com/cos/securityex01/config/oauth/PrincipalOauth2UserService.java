@@ -1,5 +1,6 @@
 package com.cos.securityex01.config.oauth;
 
+import java.util.Map;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,15 +13,21 @@ import org.springframework.stereotype.Service;
 import com.cos.securityex01.config.auth.PrincipalDetails;
 import com.cos.securityex01.config.oauth.provider.FaceBookUserInfo;
 import com.cos.securityex01.config.oauth.provider.GoogleUserInfo;
+import com.cos.securityex01.config.oauth.provider.NaverUserInfo;
 import com.cos.securityex01.config.oauth.provider.OAuth2UserInfo;
 import com.cos.securityex01.model.User;
 import com.cos.securityex01.repository.UserRepository;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 @Service
 public class PrincipalOauth2UserService extends DefaultOAuth2UserService {
 	
 	@Autowired
 	private UserRepository userRepository;
+	
+	@Autowired
+	private ObjectMapper mapper;	// Jackson 라이브러리
 	
 	@Override
 	public OAuth2User loadUser(OAuth2UserRequest userRequest) throws OAuth2AuthenticationException {
@@ -31,8 +38,15 @@ public class PrincipalOauth2UserService extends DefaultOAuth2UserService {
 		System.out.println("oAuth2User: " + oAuth2User);	// 토큰을 통해 응답받은 회원정보
 		System.out.println("userRequest.token(): " + userRequest.getAccessToken().getTokenValue());
 		System.out.println("userRequest.getClientRegistration(): " + userRequest.getClientRegistration());
-		System.out.println("userRequest: " + userRequest.getClass());
 		
+		
+		try {	// Jackson 라이브러리를 사용하여 JSON 타입으로 출력해 봄
+			System.out.println("PrincipalOauth2UserService : userRequest: " + mapper.writeValueAsString(userRequest));
+			System.out.println("PrincipalOauth2UserService: oAuth2User: " + mapper.writeValueAsString(oAuth2User));
+		} catch (JsonProcessingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		
 		// return super.loadUser(userRequest);
 		return processOAuth2User(userRequest, oAuth2User);
@@ -52,6 +66,9 @@ public class PrincipalOauth2UserService extends DefaultOAuth2UserService {
 			oAuth2UserInfo = new GoogleUserInfo(oAuth2User.getAttributes());
 		} else if (userRequest.getClientRegistration().getRegistrationId().equals("facebook")) {
 			oAuth2UserInfo = new FaceBookUserInfo(oAuth2User.getAttributes());
+		} else if (userRequest.getClientRegistration().getRegistrationId().equals("naver")) {
+			// System.out.println("네이버 로그인 요청");
+			oAuth2UserInfo = new NaverUserInfo((Map)oAuth2User.getAttributes().get("response"));	// 이 부분은 좀 이상함
 		} else {
 			System.out.println("우리는 구글과 페이스북만 지원해요");	// 사실은 이 경우는 예외를 발생시키는 게 바람직하다고
 		}

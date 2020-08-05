@@ -97,3 +97,7 @@ public @ResponseBody String manager()
    return "매니저 페이지 입니다.";
    
 ```
+
+### 좀 더 파볼 부분들
+ - https://tools.ietf.org/html/rfc6750
+ - 웹브라우저 F12 개발자 창에서 head body에 오가는 값들 확인
